@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>stars</title>
+	<script type="text/javascript">
+	//the width of the star I choose from 20px -40px;
+	var x_left = 0;
+	var x_right = 0;
+	var y_top = 0;
+	var y_bottom = 0;
+
+	//init function
+	function init() {
+	  document.body.bgColor = "#CEF6F5";  //change background color
+	  x_right = window.innerWidth - 20;
+	  y_bottom = window.innerHeight - 40;
+	  //setInterval
+	  setInterval("showStar()",1500);
+	}
+
+	//显示星星
+	function showStar(){
+	 //create an image object
+	 var obj = document.createElement("img");
+	 //get random width and coord
+	 var w = getRandom(20,40);
+	 obj.width = w;
+	 var x = getRandom(x_left,x_right);
+	 var y = getRandom(y_top,y_bottom);
+
+	 //set image src
+	 obj.src = "images/star.png";
+
+	 //add style
+	 obj.style.position = "absolute";
+	 obj.style.top = y + "px";
+	 obj.style.left = x + "px";
+
+	 //add onclick to remove the star
+	 obj.setAttribute("onclick","removeImg(this)");
+
+	 //put the image into body
+	 document.body.appendChild(obj);
+	}
+
+	function removeImg(image)
+	{
+	 document.body.removeChild(image);
+	}
+
+	function getRandom(min,max)
+	{
+	 return Math.floor(Math.random()*(max-min)+min);
+	}
+	
+	</script>
+</head>
+
+<body onload="init()">
+</body>
+</html>
