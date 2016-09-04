@@ -1,61 +1,142 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>stars</title>
-	<script type="text/javascript">
-	//the width of the star I choose from 20px -40px;
-	var x_left = 0;
-	var x_right = 0;
-	var y_top = 0;
-	var y_bottom = 0;
+	<head>
+		<style type="text/css">
+			body{
+				background-color: #A9E2F3;
+			}
+			h1{
+				color:white;
+				font-size: 40px;
+				text-align: center;
+			}
+			div{
+				text-align: center;
+			}
+			.btn{
+				width:250px;
+				height:50px;
+				font-size:20px;
+				color:green;
+				background-color: #F5F6CE;
+				border-radius: 100px;
+				border:1px solid white;
+				font-family: 'Tangerine', serif;
+			}
+			#s1{
+				color:yellow;
+				text-align: center;
+				font-size: 20px;
+			}
 
-	//init function
-	function init() {
-	  document.body.bgColor = "#CEF6F5";  //change background color
-	  x_right = window.innerWidth - 20;
-	  y_bottom = window.innerHeight - 40;
-	  //setInterval
-	  setInterval("showStar()",1500);
-	}
+			#s2{
+				border:1px solid white;
+				width:500px;
+				height: 20px;
+				display: inline-block;
+				margin-left: 215px;		
+			}
 
-	//show the star
-	function showStar(){
-	 //create an image object
-	 var obj = document.createElement("img");
-	 //get random width and coord
-	 var w = getRandom(20,40);
-	 obj.width = w;
-	 var x = getRandom(x_left,x_right);
-	 var y = getRandom(y_top,y_bottom);
+			#s3{
+				display: inline-block;
+				height:20px;
+				background-color: yellow;
+				
+			}
+		</style>
+		<!--get the special font-->
+		<link href="https://fonts.googleapis.com/css?family=Tangerine" rel="stylesheet" type="text/css">
 
-	 //set image src
-	 obj.src = "images/star.png";
+		<script type="text/javascript">
+			//window.onload = init;
+			var timer;  //the timer for crate star
+			var timer1; //the timer for Record the game time
+			var count = 0;//count for star
+			var n = 0; //count the time for star
 
-	 //add style
-	 obj.style.position = "absolute";
-	 obj.style.top = y + "px";
-	 obj.style.left = x + "px";
+			//start game
+			function startGame() {
 
-	 //add onclick to remove the star
-	 obj.setAttribute("onclick","removeImg(this)");
-
-	 //put the image into body
-	 document.body.appendChild(obj);
-	}
-
-	function removeImg(image)
-	{
-	 document.body.removeChild(image);
-	}
-
-	function getRandom(min,max)
-	{
-	 return Math.floor(Math.random()*(max-min)+min);
-	}
+				//Before start game，clear time first
+				window.clearInterval(timer);
+				window.clearInterval(timer1);
 	
-	</script>
-</head>
+				timer = window.setInterval("createStar()",400);
+				//Record the game time
+				timer1 = window.setInterval("gameTime()",1000);
+			}
 
-<body onload="init()">
-</body>
+			function createStar() {
+				//create star
+				var obj = document.createElement("img");
+				obj.src = "images/star.png";
+
+				//random size for star,20-100的
+				var w = Math.floor(Math.random()*80+20);
+				obj.width = w;
+
+				//random location 100-1100,200-600
+				var x = Math.floor(Math.random()*1000+100);
+				var y = Math.floor(Math.random()*400+200);
+				obj.style.position = "absolute";
+				obj.style.top = y+ "px";
+				obj.style.left = x + "px";
+
+				//count star
+				count++;
+				//change for progress bar,it depends on the number of stars 
+				var sp = document.getElementById("s3");
+				sp.style.width = count*25 + "px"; 
+
+				if(count>20) {
+					alert("The game is ending!");
+					window.clearInterval(timer);
+					//when the game is over, reload the page
+					location.reload();
+				}
+
+				//remove star
+				obj.onclick = removeStar;
+
+				//put img into body
+				document.body.appendChild(obj);
+			}
+
+			//click to remove star
+			function removeStar() {
+				this.parentNode.removeChild(this);
+				count--;
+				//change for progress bar,it depends on the number of stars 
+				var sp = document.getElementById("s3");
+				sp.style.width = count*5 + "px";
+			}
+
+			//pause game
+			function pauseGame() {
+				alert("Pause Game");
+			}
+
+			//record the time of game
+			function gameTime() {
+				n++;
+				var obj = document.getElementById("s1");
+				obj.innerHTML = "The game to " + n + " seconds";
+			}
+
+		</script>
+	</head>
+	<body>
+		<h1>Star Game</h1>
+		<div>
+			<input class="btn" type="button" value="StartGame" onclick="startGame();">
+			<input class="btn" type="button" value="EndGame" onclick="pauseGame();">
+			<br>
+			<span id="s1">The game to 0 seconds</span>
+		</div>
+
+		<!--progress bar-->
+		
+		<span id="s2"><span id="s3"></span></span>
+		
+	</body>
 </html>
